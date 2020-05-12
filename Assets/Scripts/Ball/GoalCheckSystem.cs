@@ -5,6 +5,7 @@ using Unity.Transforms;
 using UnityEngine;
 
 public class GoalCheckSystem : JobComponentSystem {
+
     protected override JobHandle OnUpdate(JobHandle inputDeps) {
         EntityCommandBuffer ecb = new EntityCommandBuffer(Allocator.TempJob);
 
@@ -17,9 +18,13 @@ public class GoalCheckSystem : JobComponentSystem {
 
                 if(pos.x >= bound) {
                     GameManager.main.UpdatePlayerScore(0);
+                    var goalExplosion = ecb.Instantiate(GoalExplosionPrefabEntity.prefab);
+                    ecb.AddComponent(goalExplosion, trans);
                     ecb.DestroyEntity(entity);
                 } else if(pos.x <= -bound) {
                     GameManager.main.UpdatePlayerScore(1);
+                    var goalExplosion = ecb.Instantiate(GoalExplosionPrefabEntity.prefab);
+                    ecb.AddComponent(goalExplosion, trans);
                     ecb.DestroyEntity(entity);
                 }
             }).Run();
