@@ -16,7 +16,8 @@ public class PaddleMovimentSystem : JobComponentSystem
         Entities
             .WithoutBurst()
             .ForEach((ref Translation trans, in PaddleMovimentData movimentData) => {
-                trans.Value.y = math.clamp(trans.Value.y + (movimentData.speed * movimentData.direction * deltaTime), -yBound, yBound);
+                var speed = movimentData.speed * movimentData.speedMultiplier;
+                trans.Value.y = math.clamp(trans.Value.y + (speed * movimentData.direction * deltaTime), -yBound, yBound);
             }).Run();
 
         return default;

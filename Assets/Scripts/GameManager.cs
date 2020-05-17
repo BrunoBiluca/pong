@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.Entities;
+using Unity.Entities.UniversalDelegates;
 using Unity.Mathematics;
 using Unity.Physics;
 using UnityEngine;
@@ -22,6 +24,11 @@ public class GameManager : MonoBehaviour {
     public Text[] playerScoreTexts;
     int[] playerScores;
 
+    public Image[] playerHasNewBallImages;
+    bool[] playerHasNewBall;
+
+    int ballCounter;
+
     private void Awake() {
         if(main != null && main != this) {
             Destroy(gameObject);
@@ -29,6 +36,7 @@ public class GameManager : MonoBehaviour {
         }
         main = this;
 
+        ballCounter = 0;
         delayInitial = new WaitForSeconds(2f);
         delayBetween = new WaitForSeconds(1f);
 
@@ -36,14 +44,25 @@ public class GameManager : MonoBehaviour {
 
         playerScores = new int[2];
 
+        foreach(var image in playerHasNewBallImages) {
+            image.enabled = false;
+        }
+        playerHasNewBall = new bool[2];
+
         StartCoroutine(CountdownGetReadyText());
         // TODO: verificar uma forma de saber se a coroutine terminou e então chamar o spawn da bola
     }
 
     public void UpdatePlayerScore(int playerID) {
+        ballCounter--;
         playerScoreTexts[playerID].text = (++playerScores[playerID]).ToString();
 
-        StartCoroutine(CountdownGetReadyText());
+        // TODO: implementar regra
+        playerHasNewBallImages[playerID].enabled = true;
+        playerHasNewBall[playerID] = true;
+
+        if(ballCounter == 0)
+            StartCoroutine(CountdownGetReadyText());
     }
 
     IEnumerator CountdownGetReadyText() {
@@ -67,7 +86,22 @@ public class GameManager : MonoBehaviour {
         SpawnBall();
     }
 
-    void SpawnBall() {
+    public void LaunchNewBall(int playerId) {
+        if(!playerHasNewBall[playerId]) return;
+
+        playerHasNewBall[playerId] = false;
+        playerHasNewBallImages[playerId].enabled = false;
+        StartCoroutine(Lauch());
+    }
+
+    IEnumerator Lauch() {
+        yield return delayBetween;
+        SpawnBall();
+    }
+
+
+    public void SpawnBall() {
+        ballCounter++;
         var ball = manager.Instantiate(BallPrefabEntity.prefab);
 
         var dir = new Vector3(UnityEngine.Random.Range(0, 2) == 0 ? -1 : 1, UnityEngine.Random.Range(-.5f, .5f), 0f).normalized;
