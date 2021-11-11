@@ -8,7 +8,8 @@ using Unity.Physics;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameManager : MonoBehaviour {
+public class GameManager : MonoBehaviour
+{
 
     public static GameManager main;
 
@@ -29,8 +30,10 @@ public class GameManager : MonoBehaviour {
 
     int ballCounter;
 
-    private void Awake() {
-        if(main != null && main != this) {
+    private void Awake()
+    {
+        if(main != null && main != this)
+        {
             Destroy(gameObject);
             return;
         }
@@ -44,7 +47,8 @@ public class GameManager : MonoBehaviour {
 
         playerScores = new int[2];
 
-        foreach(var image in playerHasNewBallImages) {
+        foreach(var image in playerHasNewBallImages)
+        {
             image.enabled = false;
         }
         playerHasNewBall = new bool[2];
@@ -53,7 +57,8 @@ public class GameManager : MonoBehaviour {
         // TODO: verificar uma forma de saber se a coroutine terminou e então chamar o spawn da bola
     }
 
-    public void UpdatePlayerScore(int playerID) {
+    public void UpdatePlayerScore(int playerID)
+    {
         ballCounter--;
         playerScoreTexts[playerID].text = (++playerScores[playerID]).ToString();
 
@@ -65,7 +70,8 @@ public class GameManager : MonoBehaviour {
             StartCoroutine(CountdownGetReadyText());
     }
 
-    IEnumerator CountdownGetReadyText() {
+    IEnumerator CountdownGetReadyText()
+    {
         getReady.text = "Get Ready!";
         yield return delayInitial;
 
@@ -86,7 +92,8 @@ public class GameManager : MonoBehaviour {
         SpawnBall();
     }
 
-    public void LaunchNewBall(int playerId) {
+    public void LaunchNewBall(int playerId)
+    {
         if(!playerHasNewBall[playerId]) return;
 
         playerHasNewBall[playerId] = false;
@@ -94,13 +101,15 @@ public class GameManager : MonoBehaviour {
         StartCoroutine(Lauch());
     }
 
-    IEnumerator Lauch() {
+    IEnumerator Lauch()
+    {
         yield return delayBetween;
         SpawnBall();
     }
 
 
-    public void SpawnBall() {
+    public void SpawnBall()
+    {
         ballCounter++;
         var ball = manager.Instantiate(BallPrefabEntity.prefab);
 
