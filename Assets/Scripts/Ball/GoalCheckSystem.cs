@@ -10,14 +10,14 @@ public class GoalCheckSystem : JobComponentSystem
     protected override JobHandle OnUpdate(JobHandle inputDeps)
     {
         EntityCommandBuffer ecb = new EntityCommandBuffer(Allocator.TempJob);
-
         Entities
             .WithAll<BallTag>()
             .WithoutBurst()
             .ForEach((Entity entity, ref Rotation rotation, in Translation trans) => {
                 var pos = trans.Value;
-                float bound = GameManager.main.xBound;
 
+                var bound = GameManager.main.xGameEdge;
+                
                 if(pos.x >= bound)
                 {
                     ScoreGoal(entity, rotation, trans, 1f, in ecb);

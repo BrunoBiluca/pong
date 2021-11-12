@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using Unity.Entities;
-using Unity.Entities.UniversalDelegates;
 using Unity.Mathematics;
 using Unity.Physics;
 using UnityEngine;
@@ -15,7 +12,8 @@ public class GameManager : MonoBehaviour
 
     EntityManager manager;
 
-    public float xBound = 15f;
+    public float xGameEdge = 9f;
+    public float2 xBound = new float2(5f, 8f);
     public float yBound = 3f;
 
     public Text getReady;
@@ -54,7 +52,6 @@ public class GameManager : MonoBehaviour
         playerHasNewBall = new bool[2];
 
         StartCoroutine(CountdownGetReadyText());
-        // TODO: verificar uma forma de saber se a coroutine terminou e então chamar o spawn da bola
     }
 
     public void UpdatePlayerScore(int playerID)
@@ -62,7 +59,6 @@ public class GameManager : MonoBehaviour
         ballCounter--;
         playerScoreTexts[playerID].text = (++playerScores[playerID]).ToString();
 
-        // TODO: implementar regra
         playerHasNewBallImages[playerID].enabled = true;
         playerHasNewBall[playerID] = true;
 

@@ -1,11 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Unity.Entities;
+﻿using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Physics;
-using Unity.Physics.Extensions;
-using UnityEngine;
 
 [AlwaysSynchronizeSystem]
 public class BallMovimentSystem : JobComponentSystem {
