@@ -20,11 +20,11 @@ public class GoalCheckSystem : JobComponentSystem
                 
                 if(pos.x >= bound)
                 {
-                    ScoreGoal(entity, rotation, trans, 1f, in ecb);
+                    ScoreGoal(entity, rotation, trans, 1f, 0, in ecb);
                 }
                 else if(pos.x <= -bound)
                 {
-                    ScoreGoal(entity, rotation, trans, -1f, in ecb);
+                    ScoreGoal(entity, rotation, trans, -1f, 1, in ecb);
                 }
             }).Run();
 
@@ -39,10 +39,11 @@ public class GoalCheckSystem : JobComponentSystem
         Rotation rotation,
         Translation trans,
         float direction,
+        int gameplaySide,
         in EntityCommandBuffer ecb
     )
     {
-        GameManager.main.UpdatePlayerScore(0);
+        GameManager.main.UpdatePlayerScore(gameplaySide);
 
         var goalExplosion = ecb
             .Instantiate(GoalExplosionPrefabEntity.prefab);
